@@ -97,6 +97,11 @@ class GPT(nn.Module):
         super().__init__()
         self.config = config
 
+        # Tokens are normally around up to 4 chars in length such as "un" + "bel" + "iev" + "able".
+        # This is a tade off between vocabulary size and sequence length. 
+        # Both exteremes are bad. Sequence length blows out compute. Vocab size blows out memory.
+        # For this project, doe to the limited vocab size, we can use a character-level model. This is simpler and works well for small datasets like Shakespeare.
+
         # Two embedding tables:
         # wte (word token embedding): maps each token ID to a learned vector. Size: [65, 384]
         # wpe (word position embedding): maps each position (0 to 255) to a learned vector. Size: [256, 384]
