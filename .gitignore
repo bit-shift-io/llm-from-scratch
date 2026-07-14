@@ -1,2 +1,4 @@
 .DS_Store
 .venv
+checkpoint_*
+__pycache__/

@@ -1,10 +1,14 @@
 # docs/03-training-loop.md
 
+import os
 import torch
 import math
 import json
 from tqdm import tqdm
 from model import GPT, GPTConfig
+from generate import generate
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def load_data(filepath, block_size, batch_size, device):
     with open(filepath, "r") as f:
@@ -69,6 +73,7 @@ def train(data_path, max_steps=5000, batch_size=64,
         n_head=n_head,
         n_embd=n_embd,
     )
+
     model = GPT(config).to(device)
     print(f"Model: {n_layer}L/{n_head}H/{n_embd}D, "
           f"{sum(p.numel() for p in model.parameters()) / 1e6:.1f}M params")
@@ -154,4 +159,16 @@ def train(data_path, max_steps=5000, batch_size=64,
 
 
 if __name__ == "__main__":
-    train("../data/shakespeare.txt")
+    data_path = os.path.join(SCRIPT_DIR, "data", "shakespeare.txt")
+
+    # # 6L/6H/384D
+    # train(data_path, max_steps=5000, batch_size=64,
+    #       n_layer=6, n_head=6, n_embd=384, block_size=256)
+    
+    # # 4L/4H/256D
+    # train(data_path, max_steps=5000, batch_size=64,
+    #       n_layer=4, n_head=4, n_embd=256, block_size=256)
+    
+    # 2L/2H/128D
+    train(data_path, max_steps=5000, batch_size=64,
+          n_layer=2, n_head=2, n_embd=128, block_size=256)
