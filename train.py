@@ -159,6 +159,7 @@ def train(data_path, max_steps=5000, batch_size=64,
 
 
 if __name__ == "__main__":
+    # TinyStories (https://huggingface.co/datasets/roneneldan/TinyStories/tree/main), is the next size up. You may want to switch to BPE tokenization.
     data_path = os.path.join(SCRIPT_DIR, "data", "shakespeare.txt")
 
     # # 6L/6H/384D
