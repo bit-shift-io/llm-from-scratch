@@ -1,0 +1,24 @@
+{
+  // Debug configurations for VS Code. Requires the Python extension (ms-python.python).
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    },
+    {
+      "name": "Python: model.py",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/model.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true
+    }
+  ]
+}
