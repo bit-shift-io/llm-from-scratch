@@ -20,7 +20,21 @@ class CausalSelfAttention(nn.Module):
     def __init__(self, config):
         super().__init__()
         assert config.n_embd % config.n_head == 0
+
+        # c_attn produces Q/K/V for all 6 heads via a single linear layer instead of
+        # 18 separate small ones (3 x 6 heads). Its output size is 3 * n_embd (1152),
+        # i.e. 3x the embedding dimension — not 18x — because n_embd (384) already
+        # spans all 6 heads combined (head_dim = 384/6 = 64). One matmul is more
+        # efficient on GPUs than 18 tiny ones.
+        #
+        # Q, K, V are named for the roles the fixed math in scaled_dot_product_attention
+        # gives them: two of the three slices get dot-producted together to form
+        # attention weights (query/key), and the third gets weighted-summed by those
+        # weights (value). The math defines that structure; training is what shapes
+        # c_attn's weights to actually fill those roles usefully.
+        # The math sets up the game; training is what actually plays it.
         self.c_attn = nn.Linear(config.n_embd, 3 * config.n_embd)  # Q, K, V projections
+
         self.c_proj = nn.Linear(config.n_embd, config.n_embd)       # output projection
         self.n_head = config.n_head
         self.n_embd = config.n_embd

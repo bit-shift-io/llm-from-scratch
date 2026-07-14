@@ -2,3 +2,4 @@
 .venv
 checkpoint_*
 __pycache__/
+loss_log.json
